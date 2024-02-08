@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,6 +32,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @Validated
+//to remove the /user on each method
+@RequestMapping(value = "/users")
 public class UserController {
 
     //Autowired userService
@@ -39,7 +42,7 @@ public class UserController {
 
     //getAllUsersMethod
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
@@ -48,7 +51,7 @@ public class UserController {
     //@RequestBody: to show the type that needs to match in the request
     //@PostMapping: create
     //@Valid shows why the validation does not passed and returned a template format response
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder){
         try {
             userService.createUser(user);
@@ -60,7 +63,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable("id") @Min(1) Long id){
         try {
             return userService.getUserById(id);
@@ -70,7 +73,7 @@ public class UserController {
     }
 
     //updateUserById
-    @PutMapping("users/{id}")
+    @PutMapping("/{id}")
     public User updateUserById(@PathVariable Long id, @RequestBody User user) {
         try {
             return userService.updateuserById(id, user);    
@@ -80,13 +83,13 @@ public class UserController {
     }
 
     //deleteUserById
-    @DeleteMapping("users/{id}")
+    @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable("id") Long id){
         userService.deleteUserById(id);
     }
 
     //getUserByUsename
-    @GetMapping("users/byusername/{username}")
+    @GetMapping("/byusername/{username}")
     public User getMethodName(@PathVariable String username) throws UsernameNotFoundException {
         User user = userService.getUserByUsername(username);
         if (user==null) {
