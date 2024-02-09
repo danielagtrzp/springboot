@@ -7,6 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +29,8 @@ import jakarta.validation.constraints.Size;
 @Table(name = "users") 
 //@JsonIgnoreProperties({"firstname","lastname"})
 //otrhe aproach to ignore properties -staticfiltering JsonIgnore
-@JsonFilter(value = "userFilter")//to use the mapping jackson in thecontroller
+//@JsonFilter(value = "userFilter")//to use the mapping jackson in thecontroller
+@JsonView(View.External.class)
 public class User extends RepresentationModel<User>{
     //with this JPA makes this our primary key
     @Id
@@ -38,28 +40,35 @@ public class User extends RepresentationModel<User>{
 
     @NotEmpty(message = "Username is Mandatory field. Please provide username")
     @Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
+    @JsonView(View.External.class)
     private String username;
 
     @Size(min=2, message="FirstName should have atleast 2 characters")
     @Column(name = "FIRST_NAME", length = 50, nullable = false)
+    @JsonView(View.External.class)
     private String firstname;
 
     @Column(name = "LAST_NAME", length = 50, nullable = false)
+    @JsonView(View.External.class)
     private String lastname;
 
     @Column(name = "EMAIL_ADRESS", length = 50, nullable = false)
+    @JsonView(View.External.class)
     private String email;
 
     @Column(name = "ROLE", length = 50, nullable = false)
+    @JsonView(View.Internal.class)
     private String role;
 
     @Column(name = "SSN", length = 50, nullable = false, unique = true)
+    @JsonView(View.Internal.class)
     //@JsonIgnore
     //hides ssn from the response, the problem is that if I create a new user or update it will be an error because of nulleable arg 
     //also I can set nullable as true and it will work, just check if put and post still working -staticfiltering JsonIgnore
     private String ssn;
 
     @OneToMany(mappedBy = "user")
+    @JsonView(View.Internal.class)
     private List<Order> orders;
 
     //NO ARGUMENT CONSTRUCTOR 

@@ -3,6 +3,7 @@ package com.dan.coursespringboot.entities;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,8 +18,11 @@ public class Order extends RepresentationModel<Order>{
 
     @Id
     @GeneratedValue
+    @JsonView(View.Internal.class)
     private Long orderId;
+
     private String orderDescription;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore//when create a new order in the json request I dont need to consider user
     private User user;
