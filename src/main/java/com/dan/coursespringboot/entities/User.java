@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -25,7 +26,9 @@ import jakarta.validation.constraints.Size;
 //@Table is an optional annotation that you can override default table name, schema name etc.
 @Entity
 @Table(name = "users") 
-@JsonIgnoreProperties({"firstname","lastname"})//otrhe aproach to ignore properties
+//@JsonIgnoreProperties({"firstname","lastname"})
+//otrhe aproach to ignore properties -staticfiltering JsonIgnore
+@JsonFilter(value = "userFilter")//to use the mapping jackson in thecontroller
 public class User extends RepresentationModel<User>{
     //with this JPA makes this our primary key
     @Id
@@ -38,10 +41,10 @@ public class User extends RepresentationModel<User>{
     private String username;
 
     @Size(min=2, message="FirstName should have atleast 2 characters")
-    @Column(name = "FIRST_NAME", length = 50, nullable = true)
+    @Column(name = "FIRST_NAME", length = 50, nullable = false)
     private String firstname;
 
-    @Column(name = "LAST_NAME", length = 50, nullable = true)
+    @Column(name = "LAST_NAME", length = 50, nullable = false)
     private String lastname;
 
     @Column(name = "EMAIL_ADRESS", length = 50, nullable = false)
@@ -50,10 +53,10 @@ public class User extends RepresentationModel<User>{
     @Column(name = "ROLE", length = 50, nullable = false)
     private String role;
 
-    @Column(name = "SSN", length = 50, nullable = true, unique = true)
-    @JsonIgnore
+    @Column(name = "SSN", length = 50, nullable = false, unique = true)
+    //@JsonIgnore
     //hides ssn from the response, the problem is that if I create a new user or update it will be an error because of nulleable arg 
-    //also I can set nullable as true and it will work, just check if put and post still working
+    //also I can set nullable as true and it will work, just check if put and post still working -staticfiltering JsonIgnore
     private String ssn;
 
     @OneToMany(mappedBy = "user")
