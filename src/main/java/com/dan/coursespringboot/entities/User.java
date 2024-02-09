@@ -2,17 +2,17 @@ package com.dan.coursespringboot.entities;
 
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-//import jakarta.persistence.Table;
 
 //Entity: pojos representing data that can be persisted to the db
 // -> any instance of an entity represents row in a table 
@@ -22,12 +22,12 @@ import jakarta.validation.constraints.Size;
 //@Table is an optional annotation that you can override default table name, schema name etc.
 @Entity
 @Table(name = "users") 
-public class User {
+public class User extends RepresentationModel<User>{
     //with this JPA makes this our primary key
     @Id
     //JPA autogenerates the value
     @GeneratedValue 
-    private Long id;
+    private Long userid;
 
     @NotEmpty(message = "Username is Mandatory field. Please provide username")
     @Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
@@ -56,8 +56,8 @@ public class User {
     public User() {}
 
     //FIELDS CONSTRUCTOR
-    public User(Long id, String username, String firstname, String lastname, String email, String role, String ssn) {
-        this.id = id;
+    public User(Long userid, String username, String firstname, String lastname, String email, String role, String ssn) {
+        this.userid = userid;
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -65,15 +65,15 @@ public class User {
         this.role = role;
         this.ssn = ssn;
     }
-    
+
     //GETTERS & SETTERS
-    public Long getId() {
-        return id;
+
+    public Long getUserid() {
+        return userid;
     }
 
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserid(Long userid) {
+        this.userid = userid;
     }
 
     public String getUsername() {
@@ -124,7 +124,6 @@ public class User {
         this.ssn = ssn;
     }
 
-    
     public List<Order> getOrders() {
         return orders;
     }
@@ -133,12 +132,10 @@ public class User {
         this.orders = orders;
     }
 
-    //TO STRING OPTIONAL FOR BEAN LOGGING
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
-                + ", email=" + email + ", role=" + role + ", ssn=" + ssn + "]";
+        return "User [userid=" + userid + ", username=" + username + ", firstname=" + firstname + ", lastname="
+                + lastname + ", email=" + email + ", role=" + role + ", ssn=" + ssn + ", orders=" + orders + "]";
     }
-
-
+    
 }
