@@ -18,8 +18,11 @@ import com.dan.coursespringboot.exceptions.UserNotFoundException;
 import com.dan.coursespringboot.repositories.OrderRepository;
 import com.dan.coursespringboot.repositories.UserRepository;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(value = "/users")
+@Tag(name = "Order managment RESTFull services", description = "Controller dor Order Managment")
 public class OrderController {
 
     @Autowired

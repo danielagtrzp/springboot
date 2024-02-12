@@ -24,6 +24,10 @@ import com.dan.coursespringboot.exceptions.UserNotFoundException;
 import com.dan.coursespringboot.exceptions.UsernameNotFoundException;
 import com.dan.coursespringboot.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.models.media.MediaType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
@@ -34,6 +38,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @Validated
 //to remove the /user on each method
 @RequestMapping(value = "/users")
+@Tag(name = "User managment RESTFull services", description = "Controller dor User Managment")//to swaager.ui title and description
 public class UserController {
 
     //Autowired userService
@@ -42,7 +47,8 @@ public class UserController {
 
     //getAllUsersMethod
 
-    @GetMapping
+    @GetMapping(produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)//en swagger.ui mostrar application/json en lugar de  */*
+    @Operation(summary = "Retrieve all users", description = "retrieve all users")//to swaager.ui title and description
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
@@ -52,6 +58,7 @@ public class UserController {
     //@PostMapping: create
     //@Valid shows why the validation does not passed and returned a template format response
     @PostMapping
+    @Operation(summary = "Create new user")//to swaager.ui title and description
     public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder){
         try {
             userService.createUser(user);
@@ -64,9 +71,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable("id") @Min(1) Long id){
+    public User getUserById(@PathVariable("id") @Min(1) Long id){
         try {
-            return userService.getUserById(id);
+            Optional<User> opcionalUser = userService.getUserById(id);
+            return opcionalUser.get();
         } catch (UserNotFoundException e) {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -74,7 +82,7 @@ public class UserController {
 
     //updateUserById
     @PutMapping("/{id}")
-    public User updateUserById(@PathVariable Long id, @RequestBody User user) {
+    public User updateUserById(@PathVariable Long id, @Parameter(description ="user info to create a new user") @RequestBody User user) {
         try {
             return userService.updateuserById(id, user);    
         } catch (UserNotFoundException e) {
