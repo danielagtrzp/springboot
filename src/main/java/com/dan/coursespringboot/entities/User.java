@@ -36,6 +36,7 @@ public class User extends RepresentationModel<User>{
     @Id
     //JPA autogenerates the value
     @GeneratedValue 
+    @Column(name="ID")
     private Long userid;
 
     @NotEmpty(message = "Username is Mandatory field. Please provide username")
@@ -71,11 +72,14 @@ public class User extends RepresentationModel<User>{
     @JsonView(View.Internal.class)
     private List<Order> orders;
 
+    @Column(name = "ADDRESS")
+    private String address;
+
     //NO ARGUMENT CONSTRUCTOR 
     public User() {}
 
     //FIELDS CONSTRUCTOR
-    public User(Long userid, String username, String firstname, String lastname, String email, String role, String ssn) {
+    public User(Long userid, String username, String firstname, String lastname, String email, String role, String ssn, String address) {
         this.userid = userid;
         this.username = username;
         this.firstname = firstname;
@@ -83,6 +87,7 @@ public class User extends RepresentationModel<User>{
         this.email = email;
         this.role = role;
         this.ssn = ssn;
+        this.address = address;
     }
 
     //GETTERS & SETTERS
@@ -151,10 +156,19 @@ public class User extends RepresentationModel<User>{
         this.orders = orders;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "User [userid=" + userid + ", username=" + username + ", firstname=" + firstname + ", lastname="
-                + lastname + ", email=" + email + ", role=" + role + ", ssn=" + ssn + ", orders=" + orders + "]";
+                + lastname + ", email=" + email + ", role=" + role + ", ssn=" + ssn + ", orders=" + orders
+                + ", address=" + address + "]";
     }
-    
+   
 }
